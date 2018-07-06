@@ -6,7 +6,7 @@
 #Assumptions
 # - Temporary files are created in the local directory
 
-source ./config #contains common variables and file paths
+source ./lxd.conf #contains common variables and file paths
 
 #input validation
 if [[ "$#" != 4 && "$#" != 5 ]]; then 

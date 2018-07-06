@@ -6,7 +6,7 @@
 #Assumptions
 # - Temporary files are created in the local directory
 
-source ./config
+source ./lxd.conf
 
 #input validation
 if [[ $# !=  4 ]] && [[ $# != 5 ]]; then
@@ -46,8 +46,6 @@ chmod 600 authorized_keys
 cat $KEY_PATH/jumpbox.pub >> authorized_keys
 
 #launch container, create user and make them sudo if requested
-#ssh -t $1 "lxc launch $IMAGE $2"
-#sudo lxc launch $IMAGE $1:$2
 sudo lxc exec $1:$2 -- adduser --disabled-password --gecos "" $3 &> /dev/null
 if [ "$MAKE_SUDO" == "TRUE" ]
 then
@@ -80,11 +78,6 @@ done
 
 #set up a static IP for the container
 ip_addr=$(<IP)
-#scp $1:/etc/default/$DNS_FILE .
-#echo "dhcp-host=$2,$ip_addr" | sudo tee --append ./$DNS_FILE
-#scp $DNS_FILE $1:~/
-#ssh -t $1 "sudo mv ~/$DNS_FILE /etc/default"
-#rm dns.conf
 
 #set up the jumpkey configuration file
 cp $JUMP_TEMPLATE_PATH $3
