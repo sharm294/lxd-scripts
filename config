@@ -1,0 +1,14 @@
+#Variables
+ROOT_PATH="/home/savi/varun"
+KEY_PATH="$ROOT_PATH/keys"
+IMAGE="ubuntu:16.04" #image to use for the container
+DNS_FILE="dns.conf" #this is the name of the file containing the static IPs
+JUMP_TEMPLATE_PATH="$ROOT_PATH/jumpkey_template" #template configuration file for jumpbox
+JUMP_USER="USERNAME" #keyword for the username in the JUMPKEY_TEMPLATE
+JUMP_IP="IP_ADDR" #keyword for the IP address in the JUMPKEY_TEMPLATE
+JUMP_KEY="KEY" #keyword for the key in the JUMPKEY_TEMPLATE
+DEFAULT_APPS="$ROOT_PATH/defaultApps"
+DEFAULT_NON_SUDO_GROUP="reg-users"
+
+#Options
+MAKE_SUDO="TRUE"

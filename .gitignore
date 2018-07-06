@@ -1,0 +1,4 @@
+tarballs/*.tar.gz
+vivado*.log
+vivado*.jou
+keys/*.pub
