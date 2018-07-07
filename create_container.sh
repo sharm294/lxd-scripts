@@ -45,6 +45,7 @@ fi
 cp $KEY_PATH/$1.pub authorized_keys
 chmod 600 authorized_keys
 cat $KEY_PATH/jumpbox.pub >> authorized_keys
+cat $KEY_PATH/controller.pub >> authorized_keys
 
 #launch container, create user and make them sudo if requested
 ssh -t $1 "lxc launch $IMAGE $2"
