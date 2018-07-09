@@ -103,7 +103,7 @@ rm IP
 
 #install default apps
 sudo lxc exec $1:$2 -- apt-get -qq update
-sudo lxc exec $1:$2 -- apt-get -qq install $(cat ./profiles/default)
+sudo lxc exec $1:$2 -- apt-get -qq install $(cat $DEFAULT_APPS)
 
 if [ "$#" -eq 5 ]
 then

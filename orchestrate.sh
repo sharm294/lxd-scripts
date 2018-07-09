@@ -42,6 +42,8 @@ for agent in "${agents[@]}"; do
     cat ./tmp/id_rsa.pub >> ./tmp/keys
     IP=$(lxc info $agent:$CONTAINER | grep -Eo '10.84.[0-9]{1,3}.[0-9]{1,3}')
     echo "$IP $CONTAINER" >> ./tmp/hosts
+    IP_BASE=$((ETH3_IP+INDEX))
+    echo "$ETH3_IP_SUBNET.$IP_BASE ${container}_eth3" ./tmp/hosts
     INDEX=$((INDEX + 1))
 done
 
