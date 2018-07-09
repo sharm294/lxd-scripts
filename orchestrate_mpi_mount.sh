@@ -22,5 +22,5 @@ readarray -t agents < "orchestrate.conf"
 for agent in "${agents[@]}"; do
 	CONTAINER=${CONTAINER_BASE}${INDEX}
     USER=${USER_BASE}${INDEX}
-    ./applications/mount.sh $agent $CONTAINER $NFS_MASTER $NFS_MASTER_PATH $NFS_USER /home/$USER/$NFS_SLAVE_PATH
+    ./applications/mount/mount.sh $agent $CONTAINER $NFS_MASTER $NFS_MASTER_PATH $NFS_USER /home/$USER/$NFS_SLAVE_PATH
 done

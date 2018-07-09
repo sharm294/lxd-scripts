@@ -61,10 +61,10 @@ done
 rm -r ./tmp
 
 INDEX=$ORCH_INDEX
-INDEX2=$ORCH_INDEX
 for agent in "${agents[@]}"; do
     CONTAINER=${CONTAINER_BASE}${INDEX}
     USER=${USER_BASE}${INDEX}
+    INDEX2=$ORCH_INDEX
     for agent2 in "${agents[@]}"; do
     	if [[ $INDEX != $INDEX2 ]]; then
 			CONTAINER2=${CONTAINER_BASE}${INDEX2}
