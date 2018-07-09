@@ -20,4 +20,4 @@ for agent in "${agents[@]}"; do
     INDEX=$((INDEX + 1))
 done
 
-./unorchestrate.sh $CONTAINER_BASE $USER_BASE $INDEX
+./unorchestrate.sh $CONTAINER_BASE $USER_BASE $3
