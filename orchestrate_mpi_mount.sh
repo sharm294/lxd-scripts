@@ -17,5 +17,5 @@ readarray -t agents < "orchestrate.conf"
 for agent in "${agents[@]}"; do
 	CONTAINER=${CONTAINER_BASE}_${INDEX}
     USER=${USER_BASE}_${INDEX}
-    ./applications/mount.sh $agent $CONTAINER 10.10.14.102 /home/savi/cloud/ nariman /home/$USER/cloud/
+    ./applications/mount.sh $agent $CONTAINER 10.10.14.102 /home/savi/cloud/jacobi/ nariman /home/$USER/cloud/
 done
