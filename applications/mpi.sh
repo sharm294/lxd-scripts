@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ../lxd.conf
+source lxd.conf
 
 lxc exec $1:$2 -- apt-get update
 lxc exec $1:$2 -- apt-get -qq install mpich

@@ -107,5 +107,5 @@ sudo lxc exec $1:$2 -- apt-get -qq install $(cat $DEFAULT_APPS)
 
 if [ "$#" -eq 5 ]
 then
-    sh ./$5 $1 $2 $3 $4
+    ./$5 $1 $2 $3 $4
 fi
