@@ -58,6 +58,8 @@ for agent in "${agents[@]}"; do
 	INDEX=$((INDEX + 1))
 done
 
+rm -r ./tmp
+
 INDEX=$ORCH_INDEX
 INDEX2=$ORCH_INDEX
 for agent in "${agents[@]}"; do
