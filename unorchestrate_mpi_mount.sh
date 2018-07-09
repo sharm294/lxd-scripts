@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #input validation
-if [[ "$#" != 3 ]]; then 
+if [[ "$#" != 4 ]]; then 
     echo "Syntax: script CONTAINER_NAME USERNAME INDEX MOUNT_USER"
     echo "e.g. unorchestrate_mpi_mount.sh 2 mpi eskandarin nariman"
     exit 1

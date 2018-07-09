@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #input validation
-if [[ "$#" != 4 ]]; then 
+if [[ "$#" != 3 ]]; then 
     echo "Syntax: script CONTAINER_NAME USERNAME INDEX"
     echo "e.g. unorchestrate.sh mpi eskandarin 0"
     exit 1

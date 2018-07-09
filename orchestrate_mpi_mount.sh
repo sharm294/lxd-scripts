@@ -16,11 +16,11 @@ NFS_MASTER_PATH=$6
 NFS_USER=$7
 NFS_SLAVE_PATH=$8
 
-./orchestrate.sh $CONTAINER_BASE $USER_BASE $INDEX $USER_KEY orchestrate.conf ./applications/mpi.sh
+./orchestrate.sh $CONTAINER_BASE $USER_BASE $INDEX $USER_KEY orchestrate.conf applications/mpi.sh
 
 readarray -t agents < "orchestrate.conf"
 for agent in "${agents[@]}"; do
 	CONTAINER=${CONTAINER_BASE}${INDEX}
     USER=${USER_BASE}${INDEX}
-    ./applications/mount/mount.sh $agent $CONTAINER $NFS_MASTER $NFS_MASTER_PATH $NFS_USER /home/$USER/$NFS_SLAVE_PATH
+    ./applications/mount/mount.sh $agent $CONTAINER $NFS_ADDR $NFS_MASTER_PATH $NFS_USER /home/$USER/$NFS_SLAVE_PATH
 done
