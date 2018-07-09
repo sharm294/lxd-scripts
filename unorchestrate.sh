@@ -14,8 +14,8 @@ ORCH_INDEX=$3
 readarray -t agents < "orchestrate.conf"
 INDEX=$ORCH_INDEX
 for agent in "${agents[@]}"; do
-    CONTAINER=${CONTAINER_BASE}_${INDEX}
-    USER=${USER_BASE}_${INDEX}
+    CONTAINER=${CONTAINER_BASE}${INDEX}
+    USER=${USER_BASE}${INDEX}
     ./remove_container.sh $agent $CONTAINER $USER
     INDEX=$((INDEX + 1))
 done

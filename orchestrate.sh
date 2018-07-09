@@ -28,8 +28,8 @@ fi
 readarray -t agents < "$ORCH_FILE"
 INDEX=$ORCH_INDEX
 for agent in "${agents[@]}"; do
-    CONTAINER=${CONTAINER_BASE}_${INDEX}
-    USER=${USER_BASE}_${INDEX}
+    CONTAINER=${CONTAINER_BASE}${INDEX}
+    USER=${USER_BASE}${INDEX}
     ./create_container.sh $agent $CONTAINER $USER $KEY $USER_SCRIPT
     if [[ $INDEX == $ORCH_INDEX ]]; then
         mkdir ./tmp
@@ -47,8 +47,8 @@ done
 
 INDEX=$ORCH_INDEX
 for agent in "${agents[@]}"; do
-    CONTAINER=${CONTAINER_BASE}_${INDEX}
-    USER=${USER_BASE}_${INDEX}
+    CONTAINER=${CONTAINER_BASE}${INDEX}
+    USER=${USER_BASE}${INDEX}
     lxc file pull $agent:$CONTAINER/home/$USER/.ssh/authorized_keys ./tmp/
     cat ./tmp/keys >> ./tmp/authorized_keys
     lxc file push ./tmp/authorized_keys $agent:$CONTAINER/home/$USER/.ssh/
@@ -63,11 +63,11 @@ rm -r ./tmp
 INDEX=$ORCH_INDEX
 INDEX2=$ORCH_INDEX
 for agent in "${agents[@]}"; do
-    CONTAINER=${CONTAINER_BASE}_${INDEX}
-    USER=${USER_BASE}_${INDEX}
+    CONTAINER=${CONTAINER_BASE}${INDEX}
+    USER=${USER_BASE}${INDEX}
     for agent2 in "${agents[@]}"; do
     	if [[ $INDEX != $INDEX2 ]]; then
-			CONTAINER2=${CONTAINER_BASE}_${INDEX2}
+			CONTAINER2=${CONTAINER_BASE}${INDEX2}
 			lxc exec $agent:$CONTAINER -- su $USER -c "ssh-keyscan -H $CONTAINER2 >> ~/.ssh/known_hosts"
 		fi
 	    INDEX2=$((INDEX2 + 1))

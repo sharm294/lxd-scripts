@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #input validation
-if [[ "$#" != 6 ]]; then 
+if [[ "$#" != 8 ]]; then 
     echo "Syntax: script CONTAINER_NAME USERNAME INDEX USER_KEY ORCH_FILE MPI_SCRIPT NFS_ADDR NFS_USER"
-    echo "e.g. orchestrate.sh mpi eskandarin 0 eskandarin0.pub '10.10.14.102' /home/savi/cloud/ nariman cloud/"
+    echo "e.g. orchestrate_mpi_mount.sh mpi eskandarin 0 eskandarin0.pub '10.10.14.102' /home/savi/cloud/ nariman cloud/"
     exit 1
 fi
 
@@ -20,7 +20,7 @@ NFS_SLAVE_PATH=$8
 
 readarray -t agents < "orchestrate.conf"
 for agent in "${agents[@]}"; do
-	CONTAINER=${CONTAINER_BASE}_${INDEX}
-    USER=${USER_BASE}_${INDEX}
+	CONTAINER=${CONTAINER_BASE}${INDEX}
+    USER=${USER_BASE}${INDEX}
     ./applications/mount.sh $agent $CONTAINER $NFS_MASTER $NFS_MASTER_PATH $NFS_USER /home/$USER/$NFS_SLAVE_PATH
 done

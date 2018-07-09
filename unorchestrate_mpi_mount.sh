@@ -14,8 +14,8 @@ MOUNT_USER=$4
 
 readarray -t agents < "orchestrate.conf"
 for agent in "${agents[@]}"; do
-	CONTAINER=${CONTAINER_BASE}_${INDEX}
-    USER=${USER_BASE}_${INDEX}
+	CONTAINER=${CONTAINER_BASE}${INDEX}
+    USER=${USER_BASE}${INDEX}
     ./applications/mount/unmount.sh $agent $CONTAINER $MOUNT_USER
 done
 
