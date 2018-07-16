@@ -21,7 +21,7 @@
 ################################################################################
 
 #input validation
-if [[ "$#" !=6 ]]; then 
+if [[ "$#" != 6 ]]; then 
     echo "Syntax: script AGENT CONTAINER MASTER_IP MASTER_ADDR USERNAME CONT_ADDR"
     echo "e.g. mount.sh agent-7 cont_a1 10.10.14.102 /home/savi/cloud/ nariman /opt/cloud/"
     exit 1

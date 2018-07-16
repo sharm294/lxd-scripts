@@ -16,7 +16,7 @@
 ################################################################################
 
 #input validation
-if [[ "$#" !=3 ]]; then 
+if [[ "$#" != 3 ]]; then 
     echo "Syntax: script AGENT CONTAINER_NAME USERNAME"
     echo "e.g. unmount.sh agent-7 cont_a1 nariman"
     exit 1
