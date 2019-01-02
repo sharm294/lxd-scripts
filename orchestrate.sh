@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 # This script orchestrates a set of containers. Based on orchestration.conf, 
-# containers are set up on the listed agents. It accepts 5-6 arguments:
+# containers are set up on the listed agents. It accepts 1-2 or 5-6 arguments:
 #   CONTAINER_BASE - base name of the containers
 #   USER_BASE - base name of the users to create
 #   INDEX - Index at which to begin numbering containers and users
 #   USER_KEY - Public key of the user
 #   ORCH_FILE - path to orchestration.conf
 #   SCRIPT - Optional. Path to a script to run after a container has been set up
+# If ORCHESTRATION_MODE is set to 1 in lxd.conf, then only the latter two args
+# must be provided.
 
 # PREAMBLE ---------------------------------------------------------------------
 

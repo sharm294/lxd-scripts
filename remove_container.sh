@@ -10,7 +10,7 @@ root_dir=$(dirname "$0")
 source $root_dir/lxd.conf
 
 # input validation
-if [[ "$#" !=  3 ]]; then
+if [[ "$#" <  2 ]]; then
     echo "syntax: script AGENT CONTAINER_NAME"
     echo "e.g. remove_container.sh agent-7 cont_a1"
     exit 1

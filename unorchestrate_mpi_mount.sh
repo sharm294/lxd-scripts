@@ -36,4 +36,4 @@ for agent in "${agents[@]}"; do
 done
 
 # call unorchestrate with the original index argument ($3) instead
-./unorchestrate.sh $container_base $user_base $3
+./unorchestrate.sh $container_base $user_base $3 orchestrate.conf
