@@ -1,10 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-sudo lxc exec $1:$2 -- git clone https://github.com/UofT-HPRC/ECE1373_assignment2.git /home/$3/ECE1373_assignment2/
-sudo lxc exec $1:$2 -- chown -R $3:$3 /home/$3/ECE1373_assignment2/
+agent=$1
+container=$2
+username=$3
 
-sudo lxc exec $1:$2 -- mkdir /home/$3/.vnc                                                                                                                                                                         
-sudo lxc file push xstartup $1:$2/home/$3/.vnc/
-sudo lxc exec $1:$2 -- chown $3:$3 /home/$3/.vnc
+homeDir=/home/$username
 
-exit 0
+$ROOT_PATH/applications/gui/gui_user.sh $agent $container $username
+
+lxc exec $agent:$container -- git clone https://github.com/UofT-HPRC/ECE1373_assignment2.git $homeDir/ECE1373_assignment2/
+lxc exec $agent:$container -- chown -R $username:$username $homeDir/ECE1373_assignment2/
+
+lxc exec $agent:$container -- mkdir $homeDir/.vnc
+lxc file push xstartup $agent:${container}$homeDir/.vnc/
+lxc exec $agent:$container -- chown $username:$username $homeDir/.vnc

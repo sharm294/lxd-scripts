@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ################################################################################
 #
@@ -19,7 +19,10 @@
 #
 ################################################################################
 
-source lxd.conf
+if [[ -z $ROOT_PATH ]]; then
+	file_dir=$(dirname "$0")
+	source $file_dir/../lxd.conf
+fi
 
 lxc exec $1:$2 -- apt-get update
 lxc exec $1:$2 -- apt-get -qq install mpich

@@ -1,17 +1,26 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-sudo lxc file push ./ece1373_a2.tar.gz $1:$2/opt/
-sudo lxc exec $1:$2 -- tar --strip-components=2 -zxf /opt/ece1373_a2.tar.gz -C /opt/
-sudo lxc exec $1:$2 -- rm /opt/ece1373_a2.tar.gz
-sudo lxc exec $1:$2 -- mkdir -p /opt/program
-sudo lxc file push ./clear.bit $1:$2/opt/program/
-sudo lxc exec $1:$2 -- chown -R root:reg-users /opt/
-sudo lxc exec $1:$2 -- chmod -R g+r /opt/
-sudo lxc exec $1:$2 -- chmod -R g+w /opt/program/
-sudo lxc exec $1:$2 -- find /opt/ -type d -exec chmod g+x {} +
+agent=$1
+container=$2
+username=$3
 
-sudo lxc exec $1:$2 -- apt-get -qq update
-sudo lxc exec $1:$2 -- apt-get -qq install \
+if [[ -z $ROOT_PATH ]]; then
+	file_dir=$(dirname "$0")
+	source $file_dir/../../lxd.conf
+fi
+
+lxc file push ./ece1373_a2.tar.gz $agent:$container/opt/
+lxc exec $agent:$container -- tar --strip-components=2 -zxf /opt/ece1373_a2.tar.gz -C /opt/
+lxc exec $agent:$container -- rm /opt/ece1373_a2.tar.gz
+lxc exec $agent:$container -- mkdir -p /opt/program
+lxc file push ./clear.bit $agent:$container/opt/program/
+lxc exec $agent:$container -- chown -R root:$DEFAULT_NON_SUDO_GROUP /opt/
+lxc exec $agent:$container -- chmod -R g+r /opt/
+lxc exec $agent:$container -- chmod -R g+w /opt/program/
+lxc exec $agent:$container -- find /opt/ -type d -exec chmod g+x {} +
+
+lxc exec $agent:$container -- apt-get -qq update
+lxc exec $agent:$container -- apt-get -qq install \
     cmake \
     git \
     wget \
@@ -32,33 +41,29 @@ sudo lxc exec $1:$2 -- apt-get -qq install \
     python-setuptools \
     python-scipy \
     python-tk
-sudo lxc exec $1:$2 -- rm -rf /var/lib/apt/lists/*
+lxc exec $agent:$container -- rm -rf /var/lib/apt/lists/*
 
-sudo lxc exec $1:$2 -- pip install --upgrade pip
-sudo lxc exec $1:$2 -- pip install "Cython>=0.19.2"
-sudo lxc exec $1:$2 -- pip install "numpy>=1.7.1"
-sudo lxc exec $1:$2 -- pip install "scipy>=0.13.2"
-sudo lxc exec $1:$2 -- pip install "scikit-image>=0.9.3"
-sudo lxc exec $1:$2 -- pip install "matplotlib>=1.3.1"
-sudo lxc exec $1:$2 -- pip install "ipython>=3.0.0"
-sudo lxc exec $1:$2 -- pip install "h5py>=2.2.0"
-sudo lxc exec $1:$2 -- pip install "leveldb>=0.191"
-sudo lxc exec $1:$2 -- pip install "networkx>=1.8.1"
-sudo lxc exec $1:$2 -- pip install "nose>=1.3.0"
-sudo lxc exec $1:$2 -- pip install "pandas>=0.12.0"
-sudo lxc exec $1:$2 -- pip install "python-dateutil>=1.3,<2"
-sudo lxc exec $1:$2 -- pip install "protobuf>=2.5.0"
-sudo lxc exec $1:$2 -- pip install "python-gflags>=2.0"
-sudo lxc exec $1:$2 -- pip install "pyyaml>=3.10"
-sudo lxc exec $1:$2 -- pip install "Pillow>=2.3.0"
-sudo lxc exec $1:$2 -- pip install "six>=1.1.0"
-sudo lxc exec $1:$2 -- pip install lmdb
+lxc exec $agent:$container -- pip install --upgrade pip
+lxc exec $agent:$container -- pip install "Cython>=0.19.2"
+lxc exec $agent:$container -- pip install "numpy>=1.7.1"
+lxc exec $agent:$container -- pip install "scipy>=0.13.2"
+lxc exec $agent:$container -- pip install "scikit-image>=0.9.3"
+lxc exec $agent:$container -- pip install "matplotlib>=1.3.1"
+lxc exec $agent:$container -- pip install "ipython>=3.0.0"
+lxc exec $agent:$container -- pip install "h5py>=2.2.0"
+lxc exec $agent:$container -- pip install "leveldb>=0.191"
+lxc exec $agent:$container -- pip install "networkx>=1.8.1"
+lxc exec $agent:$container -- pip install "nose>=1.3.0"
+lxc exec $agent:$container -- pip install "pandas>=0.12.0"
+lxc exec $agent:$container -- pip install "python-dateutil>=1.3,<2"
+lxc exec $agent:$container -- pip install "protobuf>=2.5.0"
+lxc exec $agent:$container -- pip install "python-gflags>=2.0"
+lxc exec $agent:$container -- pip install "pyyaml>=3.10"
+lxc exec $agent:$container -- pip install "Pillow>=2.3.0"
+lxc exec $agent:$container -- pip install "six>=1.1.0"
+lxc exec $agent:$container -- pip install lmdb
 
-sudo lxc file push ./tigervncserver_1.8.0-1ubuntu1_amd64.deb $1:$2/home/$3/
-sudo lxc exec $1:$2 -- apt-get -qq install xorg openbox xfce4
-sudo lxc exec $1:$2 -- dpkg -i /home/$3/tigervncserver_1.8.0-1ubuntu1_amd64.deb
-sudo lxc exec $1:$2 -- apt-get -f -qq install
-sudo lxc exec $1:$2 -- rm /home/$3/tigervncserver_1.8.0-1ubuntu1_amd64.deb
+$ROOT_PATH/applications/gui/gui.sh $agent $container $username
 
-sh ./ece1373_a2_user.sh $1 $2 $3 $4
+./ece1373_a2_user.sh $agent $container $username $user_key
 exit 0

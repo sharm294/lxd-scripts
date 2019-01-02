@@ -1,13 +1,32 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# This script will set up VNC for a container and a user. 
+# The script requires at least 3 arguments:
+#   AGENT - the hostname of the remote server hosting the container
+#   CONTAINER_NAME - name of the container where the user is
+#   USERNAME - name of the user to setup
+#	RUN_USER - run the gui_user.sh script afterwards
+
+# PREAMBLE ---------------------------------------------------------------------
 
 if [[ -z $ROOT_PATH ]]; then
-	source ../../lxd.conf
+	file_dir=$(dirname "$0")
+	source $file_dir/../../lxd.conf
 fi
 
-sudo lxc file push $ROOT_PATH/packages/tigervncserver_1.8.0-1ubuntu1_amd64.deb $1:$2/home/$3/
-sudo lxc exec $1:$2 -- apt-get -qq install xorg openbox xfce4
-sudo lxc exec $1:$2 -- dpkg -i /home/$3/tigervncserver_1.8.0-1ubuntu1_amd64.deb
-sudo lxc exec $1:$2 -- apt-get -f -qq install
-sudo lxc exec $1:$2 -- rm /home/$3/tigervncserver_1.8.0-1ubuntu1_amd64.deb
+agent=$1
+container=$2
+username=$3
 
-$ROOT_PATH/applications/gui/gui_user.sh $1 $2 $3
+# MAIN -------------------------------------------------------------------------
+
+userHome=/home/$username
+
+lxc file push $ROOT_PATH/packages/tigervncserver_1.8.0-1ubuntu1_amd64.deb $1:${2}${userHome}/
+lxc exec $agent:$container -- apt-get -qq install xorg openbox xfce4
+lxc exec $agent:$container -- dpkg -i $userHome/tigervncserver_1.8.0-1ubuntu1_amd64.deb
+lxc exec $agent:$container -- apt-get -f -qq install
+lxc exec $agent:$container -- rm $userHome/tigervncserver_1.8.0-1ubuntu1_amd64.deb
+
+if [[ $# == 4 ]]; then
+	$ROOT_PATH/applications/gui/gui_user.sh $agent $container $username
+fi
