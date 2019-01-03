@@ -20,9 +20,9 @@ source $root_dir/lxd.conf
 if [[ "$#" != 6 && "$#" != 3 ]]; then 
     echo "Syntax: script CONTAINER_BASE USERNAME INDEX ORCH_FILE SCRIPT MODE"
     echo "Syntax: script ORCH_FILE SCRIPT MODE (for ORCHESTRATION_MODE = 1)"
-    echo "e.g. orchestrate.sh mpi eskandarin 0 orchestrate.conf test.sh"
+    echo "e.g. orchestrate.sh mpi eskandarin 0 orchestrate.conf test.sh 0"
     echo "MODE: 0 - script accepts no args and executes within each container"
-    echo "MODE: 1 - script accepts agent, container, and username as args"
+    echo "MODE: 1 - script accepts agent, container, username, key as args from orchestration.conf"
     exit 1
 fi
 
@@ -50,7 +50,9 @@ fi
 # MAIN -------------------------------------------------------------------------
 
 readarray -t agents < "$orch_file"
-readarray -t script < "$user_script"
+if [[ $mode == 0 ]]; then
+    readarray -t script < "$user_script"
+fi
 index=$orch_index
 for row in "${agents[@]}"; do
     row_array=(${row})
@@ -61,13 +63,14 @@ for row in "${agents[@]}"; do
     else
         container=${row_array[1]}
         user=${row_array[2]}
+        user_key=${row_array[3]}
     fi
     if [[ $mode == 0 ]]; then
         for comm in "${script[@]}"; do
-            comm="${comm//\$user/$user}" # replace all $user with the value of $user
+            comm="${comm//\$user/$user}" # replace '$user' with the value of $user
             lxc exec $agent:$container -- $comm
         done
     else
-        $script $agent $container $user
+        $user_script $agent $container $user $user_key
     fi
 done

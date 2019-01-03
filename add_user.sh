@@ -19,7 +19,7 @@ source $root_dir/lxd.conf
 # input validation
 if [[ "$#" !=  4 ]] && [[ "$#" != 5 ]]; then
     echo "syntax: script AGENT CONTAINER_NAME USERNAME USER_KEY [SCRIPT]"
-    echo "e.g. add_user.sh agent-7 cont_a1 sharmava0 sharmava0 gui_user.sh"
+    echo "e.g. add_user.sh agent-7 cont_a1 sharmava0 sharmava0.pub gui_user.sh"
     exit 1
 fi
 
@@ -86,17 +86,15 @@ rm authorized_keys
 lxc exec $agent:$container -- chown -R $username:$username /home/$username/.ssh
 
 # get the container IP address
-[ -s "./IP" ]
-while [ $? -gt 0 ]
-do
+unset IP
+while [[ -z $IP ]]; do
     echo "Waiting for IP..."
     sleep 1
-    lxc info $agent:$container | grep -Eo '10.84.[0-9]{1,3}.[0-9]{1,3}' > IP
-    [ -s "./IP" ]
+    IP=$(lxc info $agent:$container | grep -Eo '10.84.[0-9]{1,3}.[0-9]{1,3}')
 done
 
 # set up a static IP for the container
-ip_addr=$(<IP)
+ip_addr=$IP
 
 # set up the jumpkey configuration file
 cp $JUMP_TEMPLATE_PATH $username
@@ -109,7 +107,6 @@ sed -i "s|$JUMP_KEY|$key|" $username
 scp -P9999 $username root@localhost:~/jumpkeys
 ssh -p 9999 -t root@localhost "adduser --disabled-password --gecos \"\" $username"
 rm $username
-rm IP
 
 if [ "$#" -eq 5 ]
 then

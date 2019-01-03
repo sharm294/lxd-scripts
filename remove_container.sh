@@ -22,9 +22,10 @@ container=$2
 # MAIN -------------------------------------------------------------------------
 
 # get list of all users on the container
-awk -F: '$3 >= 1000 {print $1}' /etc/passwd | while IFS=$'\n' read user; do
+usernames=( $(lxc exec $agent:$container -- awk -F: '$3 >= 1000 {print $1}' /etc/passwd) )
+for user in "${usernames[@]}"; do
     # check if this user has login credentials on the jumpbox
-    if ssh -q -p 9999 root@localhost [[ -f ~/jumpkeys/$user ]]; then 
+    if ssh -q -p 9999 root@localhost "test -e ~/jumpkeys/$user"; then 
         ssh -p 9999 -t root@localhost "userdel -r $user && rm ~/jumpkeys/$user"    
     fi
 done

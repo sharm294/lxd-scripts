@@ -68,27 +68,20 @@ ssh -t $agent "lxc launch $IMAGE $container"
 lxc exec $agent:$container -- ifconfig eth0 mtu 1300 #needed for ssh tunneling bug
 
 # get the container IP address
-[ -s "./IP" ]
-while [ $? -gt 0 ]
-do
+unset IP
+while [[ -z $IP ]]; do
     echo "Waiting for IP..."
     sleep 1
-    sudo lxc info $agent:$container | grep -Eo '10.84.[0-9]{1,3}.[0-9]{1,3}' > IP
-    [ -s "./IP" ]
+    IP=$(lxc info $agent:$container | grep -Eo '10.84.[0-9]{1,3}.[0-9]{1,3}')
 done
 
 # set up a static IP for the container
-ip_addr=$(<IP)
-scp $agent:/etc/default/$DNS_FILE .
-echo "dhcp-host=$container,$ip_addr" | sudo tee --append ./$DNS_FILE
-scp $DNS_FILE $agent:~/
-ssh -t $agent "sudo mv ~/$DNS_FILE /etc/default"
-rm dns.conf
-rm IP
+ip_addr=$IP
+ssh agent-9 'echo "dhcp-host='$container','$ip_addr'" | sudo tee --append /etc/default/'$DNS_FILE
 
 # install default apps
-sudo lxc exec $agent:$container -- apt-get -qq update
-sudo lxc exec $agent:$container -- apt-get -qq install $(cat $DEFAULT_APPS)
+lxc exec $agent:$container -- apt-get -qq update
+lxc exec $agent:$container -- apt-get -qq install $(cat $DEFAULT_APPS)
 
 if [ "$#" -eq 5 ]
 then

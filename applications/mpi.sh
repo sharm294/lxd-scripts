@@ -37,7 +37,7 @@ while [ $? -gt 0 ]
 do
     echo "Waiting for IP..."
     sleep 1
-    sudo lxc info $1:$2 | grep -Eo '10.84.[0-9]{1,3}.[0-9]{1,3}' > IP
+    lxc info $1:$2 | grep -Eo '10.84.[0-9]{1,3}.[0-9]{1,3}' > IP
     [ -s "./IP" ]
 done
 rm ./IP

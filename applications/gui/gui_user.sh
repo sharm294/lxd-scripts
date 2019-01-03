@@ -20,6 +20,6 @@ username=$3
 
 userHome=/home/$username
 
-lxc exec $agent:$container -- mkdir -p $username/.vnc 
-lxc file push $ROOT_PATH/applications/gui/xstartup_xfce $agent:${container}${username}/.vnc/
-lxc exec $agent:$container -- chown $3:$3 $username/.vnc
+lxc exec $agent:$container -- mkdir -p $userHome/.vnc 
+lxc file push $ROOT_PATH/applications/gui/xstartup_xfce $agent:${container}${userHome}/.vnc/
+lxc exec $agent:$container -- chown $username:$username $userHome/.vnc

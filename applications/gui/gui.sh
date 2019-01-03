@@ -21,8 +21,8 @@ username=$3
 
 userHome=/home/$username
 
-lxc file push $ROOT_PATH/packages/tigervncserver_1.8.0-1ubuntu1_amd64.deb $1:${2}${userHome}/
-lxc exec $agent:$container -- apt-get -qq install xorg openbox xfce4
+lxc file push $ROOT_PATH/packages/tigervncserver_1.8.0-1ubuntu1_amd64.deb $agent:${container}${userHome}/
+lxc exec $agent:$container -- apt-get -qq install xorg openbox xfce4 firefox xfce4-goodies
 lxc exec $agent:$container -- dpkg -i $userHome/tigervncserver_1.8.0-1ubuntu1_amd64.deb
 lxc exec $agent:$container -- apt-get -f -qq install
 lxc exec $agent:$container -- rm $userHome/tigervncserver_1.8.0-1ubuntu1_amd64.deb

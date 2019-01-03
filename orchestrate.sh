@@ -17,7 +17,7 @@ root_dir=$(dirname "$0")
 source $root_dir/lxd.conf
 
 # input validation
-if [[ "$#" != 5 && "$#" != 6 && "$#" != 1 && "$#" == 1 ]]; then 
+if [[ "$#" != 5 && "$#" != 6 && "$#" != 1 && "$#" != 2 ]]; then 
     echo "Syntax: script CONTAINER_BASE USERNAME INDEX USER_KEY ORCH_FILE [SCRIPT]"
     echo "Syntax: script ORCH_FILE [SCRIPT] (for ORCHESTRATION_MODE = 1)"
     echo "e.g. orchestrate.sh mpi eskandarin 0 eskandarin0.pub orchestrate.conf"
