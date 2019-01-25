@@ -62,7 +62,7 @@ fi
 # Main -------------------------------------------------------------------------
 
 # launch container
-ssh -t $agent "lxc launch $IMAGE $container"
+lxc launch $IMAGE $agent:$container
 
 # setup container
 lxc exec $agent:$container -- ifconfig eth0 mtu 1300 #needed for ssh tunneling bug
@@ -77,7 +77,7 @@ done
 
 # set up a static IP for the container
 ip_addr=$IP
-ssh agent-9 'echo "dhcp-host='$container','$ip_addr'" | sudo tee --append /etc/default/'$DNS_FILE
+ssh $agent 'echo "dhcp-host='$container','$ip_addr'" | sudo tee --append /etc/default/'$DNS_FILE
 
 # install default apps
 lxc exec $agent:$container -- apt-get -qq update

@@ -110,5 +110,5 @@ rm $username
 
 if [ "$#" -eq 5 ]
 then
-    ./$script $agent $container $username $user_key
+    ./$postscript $agent $container $username $user_key
 fi
