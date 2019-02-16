@@ -64,15 +64,25 @@ fi
 # launch container
 lxc launch $IMAGE $agent:$container
 
-# setup container
-lxc exec $agent:$container -- ifconfig eth0 mtu 1300 # needed for ssh tunneling bug
-dhcp_addr=$(ssh agent-8 "awk -F \"\\\"\" '/LXD_IPV4_ADDR/{print \$2}' /etc/default/lxd-bridge")
-lxc exec $agent:$container -- sh -c "echo \"supersede dhcp-server-identifier $dhcp_addr;\" | sudo tee --append /etc/dhcp/dhclient.conf" > /dev/null
-
 # get the container IP address
 unset IP
 while [[ -z $IP ]]; do
-    echo "Waiting for IP..."
+    echo "Waiting for temporary IP..."
+    sleep 1
+    IP=$(lxc info $agent:$container | grep -Eo '10.84.[0-9]{1,3}.[0-9]{1,3}')
+done
+
+# setup container - after IP is set
+lxc exec $agent:$container -- ifconfig eth0 mtu 1300 # needed for ssh tunneling bug
+dhcp_addr=$(ssh $agent "awk -F \"\\\"\" '/LXD_IPV4_ADDR/{print \$2}' /etc/default/lxd-bridge")
+lxc exec $agent:$container -- sh -c "echo \"supersede dhcp-server-identifier $dhcp_addr;\" | sudo tee --append /etc/dhcp/dhclient.conf" > /dev/null
+lxc exec $agent:$container -- ifdown eth0
+lxc exec $agent:$container -- ifup eth0
+
+# get the new container IP address
+unset IP
+while [[ -z $IP ]]; do
+    echo "Waiting for updated IP..."
     sleep 1
     IP=$(lxc info $agent:$container | grep -Eo '10.84.[0-9]{1,3}.[0-9]{1,3}')
 done
