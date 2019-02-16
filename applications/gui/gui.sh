@@ -19,7 +19,7 @@ username=$3
 
 # MAIN -------------------------------------------------------------------------
 
-userHome=/home/$username
+userHome=/home/
 
 lxc file push $ROOT_PATH/packages/tigervncserver_1.8.0-1ubuntu1_amd64.deb $agent:${container}${userHome}/
 lxc exec $agent:$container -- apt-get -qq install xorg openbox xfce4 firefox xfce4-goodies

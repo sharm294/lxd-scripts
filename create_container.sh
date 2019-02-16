@@ -65,7 +65,9 @@ fi
 lxc launch $IMAGE $agent:$container
 
 # setup container
-lxc exec $agent:$container -- ifconfig eth0 mtu 1300 #needed for ssh tunneling bug
+lxc exec $agent:$container -- ifconfig eth0 mtu 1300 # needed for ssh tunneling bug
+dhcp_addr=$(ssh agent-8 "awk -F \"\\\"\" '/LXD_IPV4_ADDR/{print \$2}' /etc/default/lxd-bridge")
+lxc exec $agent:$container -- sh -c "echo \"supersede dhcp-server-identifier $dhcp_addr;\" | sudo tee --append /etc/dhcp/dhclient.conf" > /dev/null
 
 # get the container IP address
 unset IP
@@ -77,7 +79,7 @@ done
 
 # set up a static IP for the container
 ip_addr=$IP
-ssh $agent 'echo "dhcp-host='$container','$ip_addr'" | sudo tee --append /etc/default/'$DNS_FILE
+ssh $agent 'echo "dhcp-host='$container','$ip_addr'" | sudo tee --append /etc/default/'$DNS_FILE > /dev/null
 
 # install default apps
 lxc exec $agent:$container -- apt-get -qq update
