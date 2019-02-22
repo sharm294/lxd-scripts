@@ -4,7 +4,7 @@
 #   AGENT - the hostname of the remote server hosting the container
 #   CONTAINER_NAME - name of the container where the user is
 #   USERNAME - name of the user to setup
-#	RUN_USER - run the gui_user.sh script afterwards
+#	EXEC_USER - run the gui_user.sh script afterwards (TRUE | FALSE)
 
 # PREAMBLE ---------------------------------------------------------------------
 
@@ -16,6 +16,7 @@ fi
 agent=$1
 container=$2
 username=$3
+exec_user=$4
 
 # MAIN -------------------------------------------------------------------------
 
@@ -27,6 +28,6 @@ lxc exec $agent:$container -- dpkg -i $userHome/tigervncserver_1.8.0-1ubuntu1_am
 lxc exec $agent:$container -- apt-get -f -qq install
 lxc exec $agent:$container -- rm $userHome/tigervncserver_1.8.0-1ubuntu1_amd64.deb
 
-if [[ $# == 4 ]]; then
+if [[ $exec_user == "TRUE" ]]; then
 	$ROOT_PATH/applications/gui/gui_user.sh $agent $container $username
 fi
