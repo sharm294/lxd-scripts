@@ -4,6 +4,7 @@ agent=$1
 container=$2
 username=$3
 
+source ./lxd.conf
 homeDir=/home/$username
 
 lxc exec $agent:$container -- git clone https://github.com/UofT-HPRC/ECE1373_assignment2.git $homeDir/ECE1373_assignment2/
